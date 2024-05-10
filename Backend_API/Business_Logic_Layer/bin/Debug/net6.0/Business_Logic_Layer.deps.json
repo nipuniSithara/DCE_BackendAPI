@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v6.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v6.0": {
+      "Business_Logic_Layer/1.0.0": {
+        "runtime": {
+          "Business_Logic_Layer.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Business_Logic_Layer/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

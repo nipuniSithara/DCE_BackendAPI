@@ -1,0 +1,12 @@
+D:\DCE\DCE_BackendAPI\Backend_API\Data_Models\bin\Debug\net6.0\Data_Models.deps.json
+D:\DCE\DCE_BackendAPI\Backend_API\Data_Models\bin\Debug\net6.0\Data_Models.dll
+D:\DCE\DCE_BackendAPI\Backend_API\Data_Models\bin\Debug\net6.0\Data_Models.pdb
+D:\DCE\DCE_BackendAPI\Backend_API\Data_Models\obj\Debug\net6.0\Data_Models.csproj.AssemblyReference.cache
+D:\DCE\DCE_BackendAPI\Backend_API\Data_Models\obj\Debug\net6.0\Data_Models.GeneratedMSBuildEditorConfig.editorconfig
+D:\DCE\DCE_BackendAPI\Backend_API\Data_Models\obj\Debug\net6.0\Data_Models.AssemblyInfoInputs.cache
+D:\DCE\DCE_BackendAPI\Backend_API\Data_Models\obj\Debug\net6.0\Data_Models.AssemblyInfo.cs
+D:\DCE\DCE_BackendAPI\Backend_API\Data_Models\obj\Debug\net6.0\Data_Models.csproj.CoreCompileInputs.cache
+D:\DCE\DCE_BackendAPI\Backend_API\Data_Models\obj\Debug\net6.0\Data_Models.dll
+D:\DCE\DCE_BackendAPI\Backend_API\Data_Models\obj\Debug\net6.0\refint\Data_Models.dll
+D:\DCE\DCE_BackendAPI\Backend_API\Data_Models\obj\Debug\net6.0\Data_Models.pdb
+D:\DCE\DCE_BackendAPI\Backend_API\Data_Models\obj\Debug\net6.0\ref\Data_Models.dll

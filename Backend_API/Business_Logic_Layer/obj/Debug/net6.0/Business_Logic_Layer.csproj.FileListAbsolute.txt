@@ -1,0 +1,12 @@
+D:\DCE\DCE_BackendAPI\Backend_API\Business_Logic_Layer\bin\Debug\net6.0\Business_Logic_Layer.deps.json
+D:\DCE\DCE_BackendAPI\Backend_API\Business_Logic_Layer\bin\Debug\net6.0\Business_Logic_Layer.dll
+D:\DCE\DCE_BackendAPI\Backend_API\Business_Logic_Layer\bin\Debug\net6.0\Business_Logic_Layer.pdb
+D:\DCE\DCE_BackendAPI\Backend_API\Business_Logic_Layer\obj\Debug\net6.0\Business_Logic_Layer.csproj.AssemblyReference.cache
+D:\DCE\DCE_BackendAPI\Backend_API\Business_Logic_Layer\obj\Debug\net6.0\Business_Logic_Layer.GeneratedMSBuildEditorConfig.editorconfig
+D:\DCE\DCE_BackendAPI\Backend_API\Business_Logic_Layer\obj\Debug\net6.0\Business_Logic_Layer.AssemblyInfoInputs.cache
+D:\DCE\DCE_BackendAPI\Backend_API\Business_Logic_Layer\obj\Debug\net6.0\Business_Logic_Layer.AssemblyInfo.cs
+D:\DCE\DCE_BackendAPI\Backend_API\Business_Logic_Layer\obj\Debug\net6.0\Business_Logic_Layer.csproj.CoreCompileInputs.cache
+D:\DCE\DCE_BackendAPI\Backend_API\Business_Logic_Layer\obj\Debug\net6.0\Business_Logic_Layer.dll
+D:\DCE\DCE_BackendAPI\Backend_API\Business_Logic_Layer\obj\Debug\net6.0\refint\Business_Logic_Layer.dll
+D:\DCE\DCE_BackendAPI\Backend_API\Business_Logic_Layer\obj\Debug\net6.0\Business_Logic_Layer.pdb
+D:\DCE\DCE_BackendAPI\Backend_API\Business_Logic_Layer\obj\Debug\net6.0\ref\Business_Logic_Layer.dll
