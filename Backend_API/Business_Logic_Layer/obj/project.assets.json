@@ -1,11 +1,30 @@
 {
   "version": 3,
   "targets": {
-    "net6.0": {}
+    "net6.0": {
+      "Data_Models/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v6.0",
+        "compile": {
+          "bin/placeholder/Data_Models.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Data_Models.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "Data_Models/1.0.0": {
+      "type": "project",
+      "path": "../Data_Models/Data_Models.csproj",
+      "msbuildProject": "../Data_Models/Data_Models.csproj"
+    }
+  },
   "projectFileDependencyGroups": {
-    "net6.0": []
+    "net6.0": [
+      "Data_Models >= 1.0.0"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\Nipuni\\.nuget\\packages\\": {}
@@ -33,7 +52,11 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "D:\\DCE\\DCE_BackendAPI\\Backend_API\\Data_Models\\Data_Models.csproj": {
+              "projectPath": "D:\\DCE\\DCE_BackendAPI\\Backend_API\\Data_Models\\Data_Models.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

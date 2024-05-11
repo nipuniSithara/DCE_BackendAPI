@@ -25,3 +25,15 @@ D:\DCE\DCE_BackendAPI\Backend_API\Backend_API\obj\Debug\net6.0\refint\Backend_AP
 D:\DCE\DCE_BackendAPI\Backend_API\Backend_API\obj\Debug\net6.0\Backend_API.pdb
 D:\DCE\DCE_BackendAPI\Backend_API\Backend_API\obj\Debug\net6.0\Backend_API.genruntimeconfig.cache
 D:\DCE\DCE_BackendAPI\Backend_API\Backend_API\obj\Debug\net6.0\ref\Backend_API.dll
+D:\DCE\DCE_BackendAPI\Backend_API\Backend_API\bin\Debug\net6.0\System.Data.SqlClient.dll
+D:\DCE\DCE_BackendAPI\Backend_API\Backend_API\bin\Debug\net6.0\runtimes\win-arm64\native\sni.dll
+D:\DCE\DCE_BackendAPI\Backend_API\Backend_API\bin\Debug\net6.0\runtimes\win-x64\native\sni.dll
+D:\DCE\DCE_BackendAPI\Backend_API\Backend_API\bin\Debug\net6.0\runtimes\win-x86\native\sni.dll
+D:\DCE\DCE_BackendAPI\Backend_API\Backend_API\bin\Debug\net6.0\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
+D:\DCE\DCE_BackendAPI\Backend_API\Backend_API\bin\Debug\net6.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
+D:\DCE\DCE_BackendAPI\Backend_API\Backend_API\bin\Debug\net6.0\Business_Logic_Layer.dll
+D:\DCE\DCE_BackendAPI\Backend_API\Backend_API\bin\Debug\net6.0\Data_Access_Layer.dll
+D:\DCE\DCE_BackendAPI\Backend_API\Backend_API\bin\Debug\net6.0\Data_Models.dll
+D:\DCE\DCE_BackendAPI\Backend_API\Backend_API\bin\Debug\net6.0\Business_Logic_Layer.pdb
+D:\DCE\DCE_BackendAPI\Backend_API\Backend_API\bin\Debug\net6.0\Data_Access_Layer.pdb
+D:\DCE\DCE_BackendAPI\Backend_API\Backend_API\bin\Debug\net6.0\Data_Models.pdb

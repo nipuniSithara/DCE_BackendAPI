@@ -7,14 +7,27 @@
   "targets": {
     ".NETCoreApp,Version=v6.0": {
       "Business_Logic_Layer/1.0.0": {
+        "dependencies": {
+          "Data_Models": "1.0.0"
+        },
         "runtime": {
           "Business_Logic_Layer.dll": {}
+        }
+      },
+      "Data_Models/1.0.0": {
+        "runtime": {
+          "Data_Models.dll": {}
         }
       }
     }
   },
   "libraries": {
     "Business_Logic_Layer/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Data_Models/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

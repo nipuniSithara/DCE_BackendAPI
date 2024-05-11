@@ -10,3 +10,6 @@ D:\DCE\DCE_BackendAPI\Backend_API\Business_Logic_Layer\obj\Debug\net6.0\Business
 D:\DCE\DCE_BackendAPI\Backend_API\Business_Logic_Layer\obj\Debug\net6.0\refint\Business_Logic_Layer.dll
 D:\DCE\DCE_BackendAPI\Backend_API\Business_Logic_Layer\obj\Debug\net6.0\Business_Logic_Layer.pdb
 D:\DCE\DCE_BackendAPI\Backend_API\Business_Logic_Layer\obj\Debug\net6.0\ref\Business_Logic_Layer.dll
+D:\DCE\DCE_BackendAPI\Backend_API\Business_Logic_Layer\bin\Debug\net6.0\Data_Models.dll
+D:\DCE\DCE_BackendAPI\Backend_API\Business_Logic_Layer\bin\Debug\net6.0\Data_Models.pdb
+D:\DCE\DCE_BackendAPI\Backend_API\Business_Logic_Layer\obj\Debug\net6.0\Business_Logic_Layer.csproj.CopyComplete

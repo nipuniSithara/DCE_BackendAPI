@@ -15,5 +15,12 @@ namespace Data_Models
         public string LastName { get; set; } = String.Empty;
         public DateTime CreatedOn { get; set; }
         public bool IsActive { get; set; }
+
+        /// <summary>
+        /// Navigation 
+        /// </summary>
+        public Product Product { get; set; } = new Product();
+        public Supplier Supplier { get; set; } = new Supplier();
+        //public Order Order { get; set; }
     }
 }
