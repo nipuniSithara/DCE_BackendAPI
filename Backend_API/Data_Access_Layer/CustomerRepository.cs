@@ -250,7 +250,12 @@ namespace Data_Access_Layer
                 using (var connection = new SqlConnection(_connectionString))
                 {
                     await connection.OpenAsync();
-
+                    //check is customer exists
+                    bool isCustomerExists = IsCustomerExists(id);
+                    if (isCustomerExists)
+                    {
+                        return new BaseResponseService().GetErrorResponse("Customer not existing!", 404);
+                    }
                     //Check if this customer id exist in Order table
                     bool isExisting = CheckOrderTable(id);
                     if (isExisting)
@@ -313,6 +318,40 @@ namespace Data_Access_Layer
 
                         int rowCount = 0;
                         rowCount =  command.ExecuteNonQuery();
+                        if (rowCount != 0)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        private bool IsCustomerExists(Guid id)
+        {
+            try
+            {
+                using (var connection = new SqlConnection(_connectionString))
+                {
+                    connection.OpenAsync();
+                    string sql = @"SELECT UserId
+                                FROM Customer 
+                                WHERE UserId = @UserId";
+
+                    using (var command = new SqlCommand(sql, connection))
+                    {
+                        command.Parameters.AddWithValue("@UserId", id);
+
+                        int rowCount = 0;
+                        rowCount = command.ExecuteNonQuery();
                         if (rowCount != 0)
                         {
                             return true;
