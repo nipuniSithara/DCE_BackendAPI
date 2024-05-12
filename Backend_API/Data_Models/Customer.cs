@@ -21,6 +21,6 @@ namespace Data_Models
         /// </summary>
         public Product Product { get; set; } = new Product();
         public Supplier Supplier { get; set; } = new Supplier();
-        //public Order Order { get; set; }
+        public Order Order { get; set; } = new Order();
     }
 }

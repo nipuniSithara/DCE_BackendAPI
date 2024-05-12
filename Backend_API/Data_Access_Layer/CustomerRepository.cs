@@ -3,6 +3,7 @@ using Business_Logic_Layer.Services;
 using Data_Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -301,6 +302,66 @@ namespace Data_Access_Layer
             }
         }
 
+        public async Task<BaseObject> ActiveOrdersByCustomers(Guid customerId)
+        {
+            try
+            {
+                List<Customer> customers = new List<Customer>();
+                using (var connection = new SqlConnection(_connectionString))
+                {
+                    await connection.OpenAsync();
+                    using (SqlCommand command = new SqlCommand("GetActiveOrdersByCustomer", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.AddWithValue("@CustomerId", customerId);
+
+                        using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                        {
+                            while (await reader.ReadAsync())
+                            {
+                                var customer = new Customer
+                                {
+                                    UserId = reader.GetGuid(reader.GetOrdinal("UserId")),
+                                    UserName = reader.GetString(reader.GetOrdinal("Username")),
+                                    Email = reader.GetString(reader.GetOrdinal("Email")),
+                                    FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
+                                    LastName = reader.GetString(reader.GetOrdinal("LastName")),
+                                    CreatedOn = reader.GetDateTime(reader.GetOrdinal("CreatedOn")),
+                                    IsActive = reader.GetBoolean(reader.GetOrdinal("IsCustomerActive"))
+                                };
+
+                                var order = new Order
+                                {
+                                    OrderId = (reader.GetGuid(reader.GetOrdinal("OrderId"))),
+                                    OrderStatus = reader.GetInt16(reader.GetOrdinal("OrderStatus")),
+                                    OrderType = reader.GetInt16(reader.GetOrdinal("OrderType")),
+                                    OrderBy = reader.GetGuid(reader.GetOrdinal("OrderBy")),
+                                    OrderedOn = reader.GetDateTime(reader.GetOrdinal("OrderedOn")),
+                                    ShippedOn = reader.GetDateTime(reader.GetOrdinal("ShippedOn")),
+                                    IsActive = reader.GetBoolean(reader.GetOrdinal("IsOrderActive"))
+                                };
+
+                                customer.Order = order;
+                                
+                                customers.Add(customer);
+                            }
+                            return new BaseResponseService().GetSuccessResponse(customers);
+                        }
+                    }
+                }
+            }
+            catch (SqlException ex)
+            {
+                Console.WriteLine($"SQL Exception: {ex.Message}");
+                return new BaseResponseService().GetErrorResponse(ex.Message, ex.ErrorCode);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception: {ex.Message}");
+                return new BaseResponseService().GetErrorResponse(ex.Message, 500);
+            }
+        }
+
         private bool CheckOrderTable(Guid id)
         {
             try
@@ -368,5 +429,6 @@ namespace Data_Access_Layer
                 throw new Exception(ex.Message);
             }
         }
+
     }
 }

@@ -50,6 +50,39 @@ namespace Backend_API.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("GetActiveOrdersByCustomer")]
+        public async Task<ActionResult> GetActiveOrdersByCustomer(Guid customerId)
+        {
+            try
+            {
+                var result = await _bll.ActiveOrdersByCustomers(customerId);
+                if (result.IsSuccess)
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    int error = result.StatusCode;
+                    switch (error)
+                    {
+                        case ((int)HttpStatusCode.NotFound):
+                            return StatusCode((int)HttpStatusCode.NotFound, result);
+                        case ((int)HttpStatusCode.Unauthorized):
+                            return StatusCode((int)HttpStatusCode.Unauthorized, result);
+                        case (int)HttpStatusCode.BadRequest:
+                            return StatusCode((int)HttpStatusCode.BadRequest, result);
+                        default:
+                            return StatusCode(StatusCodes.Status500InternalServerError, result);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         [HttpPost]
         [Route("CreateCustomer")]
         public async Task<ActionResult> CreateCustomer(Customer customer)

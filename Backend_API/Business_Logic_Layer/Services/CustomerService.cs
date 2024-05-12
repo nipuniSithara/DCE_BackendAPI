@@ -64,5 +64,17 @@ namespace Business_Logic_Layer.Services
                 throw new Exception();
             }
         }
+
+        public async Task<BaseObject> ActiveOrdersByCustomers(Guid customerId)
+        {
+            try
+            {
+                return await _dal.ActiveOrdersByCustomers(customerId);
+            }
+            catch
+            {
+                throw new Exception();
+            }
+        }
     }
 }

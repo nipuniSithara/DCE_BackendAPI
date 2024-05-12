@@ -13,5 +13,6 @@ namespace Business_Logic_Layer.Repo_Interfaces
         Task<BaseObject> AddCustomer(Customer customer);
         Task<BaseObject> UpdateCustomer(Customer customer);
         Task<BaseObject> DeleteCustomer(Guid Id);
+        Task<BaseObject> ActiveOrdersByCustomers(Guid customerId);
     }
 }
