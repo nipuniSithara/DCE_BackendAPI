@@ -16,5 +16,11 @@ namespace Data_Models
         public DateTime OrderedOn { get; set; }
         public DateTime ShippedOn { get; set; }
         public bool IsActive { get; set; }
+
+        /// <summary>
+        /// Navigation 
+        /// </summary>
+        public virtual Product? Product { get; set; }
+        public virtual Supplier? Supplier { get; set; }
     }
 }

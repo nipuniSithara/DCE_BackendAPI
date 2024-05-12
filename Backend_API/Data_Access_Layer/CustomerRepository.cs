@@ -55,13 +55,8 @@ namespace Data_Access_Layer
                 using (var connection = new SqlConnection(_connectionString))
                 {
                     await connection.OpenAsync();
-                    string sql = @"SELECT c.UserId,c.Username,c.Email,c.FirstName,c.LastName, c.CreatedOn as CustomerCreatedOn, c.IsActive as IsCustomerActive, 
-                                       s.SupplierId, s.SupplierName, s.CreatedOn as SupplierCreatedOn, s.IsActive as IsSupplierActive,
-	                                   p.ProductId, p.ProductName, p.UnitPrice, p.SupplierId, p.CreatedOn as ProductCreatedOn, p.IsActive as IsProductActive
-                                FROM Customer c
-                                LEFT JOIN [Order] o ON c.UserId = o.OrderBy
-                                LEFT JOIN Product p ON o.ProductId = p.ProductId
-                                LEFT JOIN Supplier s ON s.SupplierId = p.SupplierId";
+                    string sql = @"SELECT c.UserId,c.Username,c.Email,c.FirstName,c.LastName, c.CreatedOn as CustomerCreatedOn, c.IsActive as IsCustomerActive
+                                FROM Customer c";
 
                     using (var command = new SqlCommand(sql, connection))
                     {
@@ -79,53 +74,11 @@ namespace Data_Access_Layer
                                     CreatedOn = reader.GetDateTime(reader.GetOrdinal("CustomerCreatedOn")),
                                     IsActive = reader.GetBoolean(reader.GetOrdinal("IsCustomerActive"))
                                 };
-
-                                if (!reader.IsDBNull(reader.GetOrdinal("SupplierId")))
-                                {
-                                    var supplier = new Supplier
-                                    {
-                                        SupplierId = (reader.GetGuid(reader.GetOrdinal("SupplierId"))),
-                                        SupplierName = reader.GetString(reader.GetOrdinal("SupplierName")),
-                                        CreatedOn = reader.GetDateTime(reader.GetOrdinal("SupplierCreatedOn")),
-                                        IsActive = reader.GetBoolean(reader.GetOrdinal("IsSupplierActive"))
-                                    };
-
-                                    customer.Supplier = supplier;
-                                }
-
-                                if (!reader.IsDBNull(reader.GetOrdinal("ProductId")))
-                                {  
-                                    var product = new Product
-                                    {
-                                        ProductId = reader.GetGuid(reader.GetOrdinal("ProductId")),
-                                        ProductName = reader.GetString(reader.GetOrdinal("ProductName")),
-                                        UnitPrice = reader.GetDecimal(reader.GetOrdinal("UnitPrice")),
-                                        SupplierId = reader.GetGuid(reader.GetOrdinal("SupplierId")),
-                                        CreatedOn = reader.GetDateTime(reader.GetOrdinal("ProductCreatedOn")),
-                                        IsActive = reader.GetBoolean(reader.GetOrdinal("IsProductActive"))
-                                    };
-                                    customer.Product = product;
-                                }
-
-                                //if (!reader.IsDBNull(reader.GetOrdinal("OrderId")))
-                                //{
-                                //    var order = new Order
-                                //    {
-                                //        OrderId = reader.GetGuid(reader.GetOrdinal("OrderId")),
-                                //        OrderStatus = reader.GetInt32(reader.GetOrdinal("OrderStatus")),
-                                //        OrderType = reader.GetInt32(reader.GetOrdinal("OrderType")),
-                                //        OrderBy = reader.GetGuid(reader.GetOrdinal("OrderBy")),
-                                //        OrderedOn = reader.GetDateTime(reader.GetOrdinal("OrderedOn")),
-                                //        ShippedOn = reader.GetDateTime(reader.GetOrdinal("ShippedOn")),
-                                //        IsActive = reader.GetBoolean(reader.GetOrdinal("OrderIsActive"))
-                                //    };
-                                //    customer.Order = order;
-                                //}
-                                
                                 customers.Add(customer);
                             }
                         }
                     }
+                    connection.Close();
                 }
             }
             catch (SqlException ex)
@@ -165,19 +118,19 @@ namespace Data_Access_Layer
                         command.Parameters.AddWithValue("@CreatedOn", customer.CreatedOn);
                         command.Parameters.AddWithValue("@IsActive", customer.IsActive);
 
-                        // Execute the command and retrieve the inserted UserId
                         var insertedUserId = await command.ExecuteScalarAsync();
                         if (insertedUserId != null)
                         {
-                            List<Customer> customers = new List<Customer>();
-                            customers = await GetCustomers();
-                            return new BaseResponseService().GetSuccessResponse("Customer created successfully! Please refer the following list", customers);
+                            var obj = customer;
+                            obj.UserId = newGuid;
+                            return new BaseResponseService().GetSuccessResponse("Customer created successfully!", obj);
                         }
                         else
                         {
                             return new BaseResponseService().GetErrorResponse("Something went wrong. Please try again!",500);
                         }
                     }
+                    connection.Close();
                 }
             }
             catch (SqlException ex)
@@ -221,20 +174,18 @@ namespace Data_Access_Layer
                         command.Parameters.AddWithValue("@IsActive", customer.IsActive);
                         command.Parameters.AddWithValue("@UserId", customer.UserId);
 
-                        // Execute the command and return the number of rows affected
                         int rowCount = 0;
                         rowCount = await command.ExecuteNonQueryAsync();
                         if (rowCount > 0)
                         {
-                            List<Customer> customers = new List<Customer>();
-                            customers = await GetCustomers();
-                            return new BaseResponseService().GetSuccessResponse("Customer updated successfully! Please refer the following list", customers);
+                            return new BaseResponseService().GetSuccessResponse("Customer updated successfully!", customer);
                         }
                         else
                         {
                             return new BaseResponseService().GetErrorResponse("Something went wrong. Please try again!", 500);
                         }
                     }
+                    connection.Close();
                 }
             }
             catch (SqlException ex)
@@ -255,10 +206,9 @@ namespace Data_Access_Layer
             {
                 using (var connection = new SqlConnection(_connectionString))
                 {
-                    await connection.OpenAsync();
                     //check is customer exists
                     bool isCustomerExists = IsCustomerExists(id);
-                    if (isCustomerExists)
+                    if (!isCustomerExists)
                     {
                         return new BaseResponseService().GetErrorResponse("Customer not existing!", 404);
                     }
@@ -270,6 +220,7 @@ namespace Data_Access_Layer
                     }
                     else 
                     {
+                        await connection.OpenAsync();
                         string sql = @"
                                 DELETE FROM Customer 
                                 WHERE UserId = @UserId";
@@ -291,6 +242,7 @@ namespace Data_Access_Layer
                                 return new BaseResponseService().GetErrorResponse("Something went wrong. Please try again!", 500);
                             }
                         }
+                        connection.Close();
                     }
                     
                 }
@@ -311,7 +263,7 @@ namespace Data_Access_Layer
         {
             try
             {
-                List<Customer> customers = new List<Customer>();
+                List<Order> orders = new List<Order>();
                 using (var connection = new SqlConnection(_connectionString))
                 {
                     await connection.OpenAsync();
@@ -324,17 +276,6 @@ namespace Data_Access_Layer
                         {
                             while (await reader.ReadAsync())
                             {
-                                var customer = new Customer
-                                {
-                                    UserId = reader.GetGuid(reader.GetOrdinal("UserId")),
-                                    UserName = reader.GetString(reader.GetOrdinal("Username")),
-                                    Email = reader.GetString(reader.GetOrdinal("Email")),
-                                    FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
-                                    LastName = reader.GetString(reader.GetOrdinal("LastName")),
-                                    CreatedOn = reader.GetDateTime(reader.GetOrdinal("CustomerCreatedDate")),
-                                    IsActive = reader.GetBoolean(reader.GetOrdinal("IsCustomerActive"))
-                                };
-
                                 var order = new Order
                                 {
                                     ProductId = reader.GetGuid(reader.GetOrdinal("ProductId")),
@@ -367,18 +308,21 @@ namespace Data_Access_Layer
                                     CreatedOn = reader.GetDateTime(reader.GetOrdinal("ProductCreatedDate")),
                                     IsActive = reader.GetBoolean(reader.GetOrdinal("IsProductActive"))
                                 };
-                                customer.Order = order;
-                                customer.Supplier = supplier;
-                                customer.Product = product;
-                                customers.Add(customer);
+                                order.Supplier = supplier;
+                                order.Product = product;
+                                orders.Add(order);
+                                //order.Product = product;
+                                //order.Supplier = supplier;
+                                //orders.Add(order);
                             }
-                            if(customers == null || customers.Count == 0)
+                            if(orders == null || orders.Count == 0)
                             {
                                 return new BaseResponseService().GetSuccessResponse("This customer does not have active orders!");
                             }
-                            return new BaseResponseService().GetSuccessResponse(customers);
+                            return new BaseResponseService().GetSuccessResponse(orders);
                         }
                     }
+                    connection.Close();
                 }
             }
             catch (SqlException ex)
@@ -395,31 +339,32 @@ namespace Data_Access_Layer
 
         private bool CheckOrderTable(Guid id)
         {
+            bool output = false;
             try
             {
                 using (var connection = new SqlConnection(_connectionString))
                 {
                     connection.OpenAsync();
-                    string sql = @"SELECT OrderId
+                    string sql = @"SELECT COUNT(OrderId) AS Count
                                 FROM [Order] 
                                 WHERE OrderBy = @UserId";
-
                     using (var command = new SqlCommand(sql, connection))
                     {
                         command.Parameters.AddWithValue("@UserId", id);
-
-                        int rowCount = 0;
-                        rowCount =  command.ExecuteNonQuery();
-                        if (rowCount != 0)
+                        using (var reader = command.ExecuteReader())
                         {
-                            return true;
-                        }
-                        else
-                        {
-                            return false;
+                            while ( reader.Read())
+                            {
+                                if ((reader.GetInt32(reader.GetOrdinal("Count"))) > 0)
+                                {
+                                    output = true;
+                                }
+                            }
                         }
                     }
+                    connection.CloseAsync();
                 }
+                return output;
             }
             catch (SqlException ex)
             {
@@ -430,12 +375,13 @@ namespace Data_Access_Layer
 
         private bool IsCustomerExists(Guid id)
         {
+            bool output = false;
             try
             {
                 using (var connection = new SqlConnection(_connectionString))
                 {
                     connection.OpenAsync();
-                    string sql = @"SELECT UserId
+                    string sql = @"SELECT COUNT(UserId) AS Count
                                 FROM Customer 
                                 WHERE UserId = @UserId";
 
@@ -443,18 +389,20 @@ namespace Data_Access_Layer
                     {
                         command.Parameters.AddWithValue("@UserId", id);
 
-                        int rowCount = 0;
-                        rowCount = command.ExecuteNonQuery();
-                        if (rowCount != 0)
+                        using (var reader = command.ExecuteReader())
                         {
-                            return true;
-                        }
-                        else
-                        {
-                            return false;
+                            while (reader.Read())
+                            {
+                                if ((reader.GetInt32(reader.GetOrdinal("Count"))) > 0)
+                                {
+                                    output = true;
+                                }
+                            }
                         }
                     }
+                    connection.CloseAsync();
                 }
+                return (output);
             }
             catch (SqlException ex)
             {

@@ -19,8 +19,8 @@ namespace Data_Models
         /// <summary>
         /// Navigation 
         /// </summary>
-        public Product Product { get; set; } = null;
-        public Supplier Supplier { get; set; } = null;
-        public Order Order { get; set; } = null;
+        public virtual Product? Product { get; set; } 
+        public virtual Supplier? Supplier { get; set; } 
+        public virtual Order? Order { get; set; } 
     }
 }
