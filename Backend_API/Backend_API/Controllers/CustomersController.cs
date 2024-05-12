@@ -11,10 +11,11 @@ namespace Backend_API.Controllers
     public class CustomersController : ControllerBase
     {
         private readonly ICustomerService _bll;
-
-        public CustomersController(ICustomerService customerService)
+        private readonly ILogger<OrdersController> _logger;
+        public CustomersController(ICustomerService customerService, ILogger<OrdersController> logger)
         {
             _bll = customerService;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -46,6 +47,7 @@ namespace Backend_API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred. Please refer the error message");
                 throw new Exception(ex.Message);
             }
         }
@@ -79,6 +81,7 @@ namespace Backend_API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred. Please refer the error message");
                 throw new Exception(ex.Message);
             }
         }
@@ -112,6 +115,7 @@ namespace Backend_API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred. Please refer the error message");
                 throw new Exception(ex.Message);
             }
         }
@@ -145,6 +149,7 @@ namespace Backend_API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred. Please refer the error message");
                 throw new Exception(ex.Message);
             }
         }
@@ -178,6 +183,7 @@ namespace Backend_API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred. Please refer the error message");
                 throw new Exception(ex.Message);
             }
         }

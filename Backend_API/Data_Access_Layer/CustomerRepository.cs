@@ -8,16 +8,19 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace Data_Access_Layer
 {
     public class CustomerRepository : ICustomerRepository
     {
         private readonly string _connectionString;
+        private readonly ILogger<CustomerRepository> _logger;
 
-        public CustomerRepository(DatabaseConfiguration configuration)
+        public CustomerRepository(DatabaseConfiguration configuration, ILogger<CustomerRepository> logger)
         {
             _connectionString = configuration.ConnectionString;
+            _logger = logger;
         }
   
         public async Task<BaseObject> GetAllCustomers()
@@ -26,16 +29,20 @@ namespace Data_Access_Layer
             try
             {
                 customers = await GetCustomers();
+                if (customers == null || customers.Count == 0)
+                {
+                    return new BaseResponseService().GetSuccessResponse("There are no customer data!");
+                }
                 return new BaseResponseService().GetSuccessResponse(customers);
             }
             catch (SqlException ex)
             {
-                Console.WriteLine($"SQL Exception: {ex.Message}");
+                _logger.LogError(ex, "An error occurred in the GetAllCustomers method. : SQL Exception");
                 return new BaseResponseService().GetErrorResponse(ex.Message, ex.ErrorCode);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception: {ex.Message}");
+                _logger.LogError(ex, "An error occurred in the GetAllCustomers method. : Exception");
                 return new BaseResponseService().GetErrorResponse(ex.Message, 500);
             }
         }
@@ -123,15 +130,13 @@ namespace Data_Access_Layer
             }
             catch (SqlException ex)
             {
-                // Log the exception or handle it accordingly
-                Console.WriteLine($"SQL Exception: {ex.Message}");
-                throw; // Rethrow the exception to propagate it to the caller
+                _logger.LogError(ex, "An error occurred in the GetCustomers method. : SQL Exception");
+                throw; 
             }
             catch (Exception ex)
             {
-                // Log the exception or handle it accordingly
-                Console.WriteLine($"Exception: {ex.Message}");
-                throw; // Rethrow the exception to propagate it to the caller
+                _logger.LogError(ex, "An error occurred in the GetCustomers method. : Exception");
+                throw; 
             }
             return customers;
         }
@@ -177,12 +182,12 @@ namespace Data_Access_Layer
             }
             catch (SqlException ex)
             {
-                Console.WriteLine($"SQL Exception: {ex.Message}");
+                _logger.LogError(ex, "An error occurred in the AddCustomer method. : SQL Exception");
                 return new BaseResponseService().GetErrorResponse(ex.Message, ex.ErrorCode);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception: {ex.Message}");
+                _logger.LogError(ex, "An error occurred in the AddCustomer method. : Exception");
                 return new BaseResponseService().GetErrorResponse(ex.Message, 500);
             }
         }
@@ -234,12 +239,12 @@ namespace Data_Access_Layer
             }
             catch (SqlException ex)
             {
-                Console.WriteLine($"SQL Exception: {ex.Message}");
+                _logger.LogError(ex, "An error occurred in the UpdateCustomer method. : SQL Exception");
                 return new BaseResponseService().GetErrorResponse(ex.Message, ex.ErrorCode);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception: {ex.Message}");
+                _logger.LogError(ex, "An error occurred in the UpdateCustomer method. : Exception");
                 return new BaseResponseService().GetErrorResponse(ex.Message, 500);
             }
         }
@@ -292,12 +297,12 @@ namespace Data_Access_Layer
             }
             catch (SqlException ex)
             {
-                Console.WriteLine($"SQL Exception: {ex.Message}");
+                _logger.LogError(ex, "An error occurred in the DeleteCustomer method. : SQL Exception");
                 return new BaseResponseService().GetErrorResponse(ex.Message, ex.ErrorCode);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception: {ex.Message}");
+                _logger.LogError(ex, "An error occurred in the DeleteCustomer method. : Exception");
                 return new BaseResponseService().GetErrorResponse(ex.Message, 500);
             }
         }
@@ -326,24 +331,50 @@ namespace Data_Access_Layer
                                     Email = reader.GetString(reader.GetOrdinal("Email")),
                                     FirstName = reader.GetString(reader.GetOrdinal("FirstName")),
                                     LastName = reader.GetString(reader.GetOrdinal("LastName")),
-                                    CreatedOn = reader.GetDateTime(reader.GetOrdinal("CreatedOn")),
+                                    CreatedOn = reader.GetDateTime(reader.GetOrdinal("CustomerCreatedDate")),
                                     IsActive = reader.GetBoolean(reader.GetOrdinal("IsCustomerActive"))
                                 };
 
                                 var order = new Order
                                 {
+                                    ProductId = reader.GetGuid(reader.GetOrdinal("ProductId")),
                                     OrderId = (reader.GetGuid(reader.GetOrdinal("OrderId"))),
-                                    OrderStatus = reader.GetInt16(reader.GetOrdinal("OrderStatus")),
-                                    OrderType = reader.GetInt16(reader.GetOrdinal("OrderType")),
+                                    OrderStatus = reader.GetInt32(reader.GetOrdinal("OrderStatus")),
+                                    OrderType = reader.GetInt32(reader.GetOrdinal("OrderType")),
                                     OrderBy = reader.GetGuid(reader.GetOrdinal("OrderBy")),
                                     OrderedOn = reader.GetDateTime(reader.GetOrdinal("OrderedOn")),
-                                    ShippedOn = reader.GetDateTime(reader.GetOrdinal("ShippedOn")),
                                     IsActive = reader.GetBoolean(reader.GetOrdinal("IsOrderActive"))
                                 };
+                                if (!reader.IsDBNull(reader.GetOrdinal("ShippedOn")))
+                                {
+                                    order.ShippedOn = reader.GetDateTime(reader.GetOrdinal("ShippedOn"));
+                                }
 
+                                var supplier = new Supplier
+                                {
+                                    SupplierId = (reader.GetGuid(reader.GetOrdinal("SupplierId"))),
+                                    SupplierName = reader.GetString(reader.GetOrdinal("SupplierName")),
+                                    CreatedOn = reader.GetDateTime(reader.GetOrdinal("SupplierCreatedDate")),
+                                    IsActive = reader.GetBoolean(reader.GetOrdinal("IsSupplierActive"))
+                                };
+
+                                var product = new Product
+                                {
+                                    ProductId = reader.GetGuid(reader.GetOrdinal("ProductId")),
+                                    ProductName = reader.GetString(reader.GetOrdinal("ProductName")),
+                                    UnitPrice = reader.GetDecimal(reader.GetOrdinal("UnitPrice")),
+                                    SupplierId = reader.GetGuid(reader.GetOrdinal("SupplierId")),
+                                    CreatedOn = reader.GetDateTime(reader.GetOrdinal("ProductCreatedDate")),
+                                    IsActive = reader.GetBoolean(reader.GetOrdinal("IsProductActive"))
+                                };
                                 customer.Order = order;
-                                
+                                customer.Supplier = supplier;
+                                customer.Product = product;
                                 customers.Add(customer);
+                            }
+                            if(customers == null || customers.Count == 0)
+                            {
+                                return new BaseResponseService().GetSuccessResponse("This customer does not have active orders!");
                             }
                             return new BaseResponseService().GetSuccessResponse(customers);
                         }
@@ -352,12 +383,12 @@ namespace Data_Access_Layer
             }
             catch (SqlException ex)
             {
-                Console.WriteLine($"SQL Exception: {ex.Message}");
+                _logger.LogError(ex, "An error occurred in the ActiveOrdersByCustomers method. : SQL Exception");
                 return new BaseResponseService().GetErrorResponse(ex.Message, ex.ErrorCode);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception: {ex.Message}");
+                _logger.LogError(ex, "An error occurred in the ActiveOrdersByCustomers method. : Exception");
                 return new BaseResponseService().GetErrorResponse(ex.Message, 500);
             }
         }
@@ -392,6 +423,7 @@ namespace Data_Access_Layer
             }
             catch (SqlException ex)
             {
+                _logger.LogError(ex, "An error occurred in the CheckOrderTable method. : SQL Exception");
                 throw new Exception(ex.Message);
             }
         }
@@ -426,6 +458,7 @@ namespace Data_Access_Layer
             }
             catch (SqlException ex)
             {
+                _logger.LogError(ex, "An error occurred in the IsCustomerExists method. : SQL Exception");
                 throw new Exception(ex.Message);
             }
         }

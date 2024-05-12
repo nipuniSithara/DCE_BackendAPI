@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using Microsoft.Extensions.Logging;
 
 namespace Backend_API.Controllers
 {
@@ -10,10 +11,12 @@ namespace Backend_API.Controllers
     public class OrdersController : ControllerBase
     {
         private readonly IOrderService _bll;
+        private readonly ILogger<OrdersController> _logger;
 
-        public OrdersController(IOrderService orderService)
+        public OrdersController(IOrderService orderService, ILogger<OrdersController> logger)
         {
             _bll = orderService;
+            _logger = logger;
         }
 
         [HttpDelete]
@@ -45,6 +48,7 @@ namespace Backend_API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "An error occurred. Please refer the error message");
                 throw new Exception(ex.Message);
             }
         }

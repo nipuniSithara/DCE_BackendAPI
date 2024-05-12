@@ -2,16 +2,19 @@
 using Business_Logic_Layer.Services;
 using Data_Models;
 using System.Data.SqlClient;
+using Microsoft.Extensions.Logging;
 
 namespace Data_Access_Layer
 {
     public class OrderRepository : IOrderRepository
     {
         private readonly string _connectionString;
+        private readonly ILogger<OrderRepository> _logger;
 
-        public OrderRepository(DatabaseConfiguration configuration)
+        public OrderRepository(DatabaseConfiguration configuration, ILogger<OrderRepository> logger)
         {
             _connectionString = configuration.ConnectionString;
+            _logger = logger;
         }
 
         public async Task<BaseObject> DeleteOrder(Guid orderId)
@@ -47,12 +50,12 @@ namespace Data_Access_Layer
             }
             catch (SqlException ex)
             {
-                Console.WriteLine($"SQL Exception: {ex.Message}");
+                _logger.LogError(ex, "An error occurred in the DeleteOrder method. : SQL Exception");
                 return new BaseResponseService().GetErrorResponse(ex.Message, ex.ErrorCode);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Exception: {ex.Message}");
+                _logger.LogError(ex, "An error occurred in the DeleteOrder method. : Exception");
                 return new BaseResponseService().GetErrorResponse(ex.Message, 500);
             }
         }

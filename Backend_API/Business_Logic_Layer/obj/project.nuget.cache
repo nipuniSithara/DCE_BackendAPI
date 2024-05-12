@@ -1,8 +1,17 @@
 {
   "version": 2,
-  "dgSpecHash": "kyfyBSPNwmm3uu+R0pCygDi1fTn+7RU9HQ/FDQhaMk0xmJ0pJyqD1pVM9XOe3KbEtkGZRvlIXeIXYEhOOSkAQQ==",
+  "dgSpecHash": "MHLgurNnR+QuFoC7NAWCh5nWvxKxSXNiVZuj5XUNLR9fwS8cFjyIXCRAzUQ0fbxSKS9X/mAqgELuIMyKsPqiGw==",
   "success": true,
   "projectFilePath": "D:\\DCE\\DCE_BackendAPI\\Backend_API\\Business_Logic_Layer\\Business_Logic_Layer.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\Nipuni\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\6.0.0\\microsoft.extensions.dependencyinjection.6.0.0.nupkg.sha512",
+    "C:\\Users\\Nipuni\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\6.0.0\\microsoft.extensions.dependencyinjection.abstractions.6.0.0.nupkg.sha512",
+    "C:\\Users\\Nipuni\\.nuget\\packages\\microsoft.extensions.logging\\6.0.0\\microsoft.extensions.logging.6.0.0.nupkg.sha512",
+    "C:\\Users\\Nipuni\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\6.0.0\\microsoft.extensions.logging.abstractions.6.0.0.nupkg.sha512",
+    "C:\\Users\\Nipuni\\.nuget\\packages\\microsoft.extensions.options\\6.0.0\\microsoft.extensions.options.6.0.0.nupkg.sha512",
+    "C:\\Users\\Nipuni\\.nuget\\packages\\microsoft.extensions.primitives\\6.0.0\\microsoft.extensions.primitives.6.0.0.nupkg.sha512",
+    "C:\\Users\\Nipuni\\.nuget\\packages\\system.diagnostics.diagnosticsource\\6.0.0\\system.diagnostics.diagnosticsource.6.0.0.nupkg.sha512",
+    "C:\\Users\\Nipuni\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512"
+  ],
   "logs": []
 }
