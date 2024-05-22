@@ -12,5 +12,7 @@ namespace Data_Models
         public string SupplierName { get; set; } = string.Empty;
         public DateTime CreatedOn { get; set; }
         public bool IsActive { get; set; }
+
+        public List<Product> products { get; set; }=new List<Product>();
     }
 }

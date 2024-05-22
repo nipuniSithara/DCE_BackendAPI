@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using System.Text.RegularExpressions;
 
 namespace Business_Logic_Layer.Services
 {
@@ -26,11 +27,24 @@ namespace Business_Logic_Layer.Services
             {
                 return await _dal.DeleteOrder(Id);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred. Please refer the error message");
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<IEnumerable<Customer>> Filter(FilterDto filter)
+        {
+            try
+            {
+                return await _dal.Filter(filter);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
+
     }
 }

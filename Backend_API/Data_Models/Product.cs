@@ -8,5 +8,7 @@
         public Guid SupplierId { get; set; }
         public DateTime CreatedOn { get; set; }
         public bool IsActive { get; set; }
+
+        //public virtual Supplier? Supplier { get; set; }
     }
 }

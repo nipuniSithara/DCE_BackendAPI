@@ -10,5 +10,6 @@ namespace Business_Logic_Layer.Service_Interfaces
     public interface IOrderService
     {
         Task<BaseObject> DeleteOrder(Guid orderId);
+        Task<IEnumerable<Customer>> Filter(FilterDto filter);
     }
 }

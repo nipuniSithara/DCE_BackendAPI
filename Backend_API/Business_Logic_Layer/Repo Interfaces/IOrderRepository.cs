@@ -10,5 +10,6 @@ namespace Business_Logic_Layer.Repo_Interfaces
     public interface IOrderRepository
     {
         Task<BaseObject> DeleteOrder(Guid orderId);
+        Task<IEnumerable<Customer>> Filter(FilterDto filter);
     }
 }

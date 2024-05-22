@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using Microsoft.Extensions.Logging;
+using Data_Models;
+using System.Text.RegularExpressions;
+using System.Globalization;
 
 namespace Backend_API.Controllers
 {
@@ -51,6 +54,57 @@ namespace Backend_API.Controllers
                 _logger.LogError(ex, "An error occurred. Please refer the error message");
                 throw new Exception(ex.Message);
             }
+        }
+
+        [HttpGet]
+        [Route("filter")]
+        public async Task<IActionResult> FilterOrders([FromQuery] FilterDto criteria)
+        {
+            try
+            {
+                //check if all the input values are empty
+                if (criteria.CustomerId == null && criteria.OrderId == null && string.IsNullOrWhiteSpace(criteria.CustomerName) && string.IsNullOrWhiteSpace(criteria.OrderDate) && string.IsNullOrWhiteSpace(criteria.Email))
+                { 
+                    return BadRequest("Enter a valid criteria");
+                }
+
+                if(!string.IsNullOrWhiteSpace(criteria.Email) && !IsValidEmail(criteria.Email)) //email validation
+                {
+                    return BadRequest("Enter valid email address");
+                }
+                
+                if (!string.IsNullOrWhiteSpace(criteria.OrderDate)) //date validation
+                {
+                    DateTime orderDate;
+                    string[] format = { "yyyy-MM-dd", "MM/dd/yyyy" };
+                    if (!DateTime.TryParseExact((criteria.OrderDate),format, CultureInfo.InvariantCulture, DateTimeStyles.None, out orderDate))
+                    {
+                        return BadRequest("Please enter date in one of these formats : yyyy-MM-dd, MM/dd/yyyy");
+                    }
+                }
+                
+                var result = await _bll.Filter(criteria);
+                if (result.Count() > 0)
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return NotFound("No data found");
+                }
+            }
+            catch (Exception ex)
+            { 
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        static bool IsValidEmail(string email)
+        {
+            string pattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+            Regex regex = new Regex(pattern);
+            return regex.IsMatch(email);
         }
     }
 }
